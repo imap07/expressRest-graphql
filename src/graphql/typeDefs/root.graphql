@@ -1,0 +1,22 @@
+scalar JSON
+scalar Date
+scalar Time
+
+type Query {
+    version: String!
+    time: String!
+}
+
+input DefaultFilter {
+    query: String
+    id: [ID]
+    exclude: [ID]
+}
+
+input DefaultPropertyInput {
+    name: String!
+}
+
+type Mutation
+
+# type Subscription

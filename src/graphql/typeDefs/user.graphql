@@ -1,0 +1,79 @@
+type User {
+    id: ID!    
+    name: String!    
+    email: String
+}
+
+type UserEdge {
+    node: User!
+}
+
+type UsertQueryResult {    
+    status: Int
+    error: String
+    data: User
+}
+
+type UserConnection {
+    totalCount: Int!
+    totalEdges: Int!
+    hasMore: Boolean!
+    status: Int!
+    pag: Int!
+    edges: [UserEdge]!
+}
+
+input UserFilter {
+    query: String    
+    id: [ID]
+}
+
+type UserMutationResult {
+    data: User
+    status: Int
+    error: String
+}
+
+type UserDeleteMutationResult {
+    data: Boolean
+    status: Int
+    error: String
+}
+
+input NewUser {
+    name: String
+    email: String
+    password: String
+}
+
+input EditUser {
+    id: ID!
+    name: String
+    email: String
+}
+
+extend type Query {
+    user(id: ID email: String): UsertQueryResult
+    users(
+        pag: Int = 0
+        num: Int = 20
+        ord: String = "updatedAt"
+        asc: Boolean = false
+        filter: UserFilter
+    ): UserConnection!    
+}
+
+extend type Mutation {
+    addUser(
+        input: NewUser!
+    ): UserMutationResult    
+    updateUser(
+        input: EditUser!
+    ): UserMutationResult
+    deleteUser(
+        id: ID!
+    ): UserDeleteMutationResult
+    setPassword(
+        password: String!
+    ): Boolean!
+}

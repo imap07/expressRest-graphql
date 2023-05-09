@@ -1,0 +1,130 @@
+type Event {
+    id: ID!    
+    title: String!
+    description: String
+    start_time: Date!
+    end_time: Date!
+    location: String
+    createdAt: Date
+    updatedAt: Date
+}
+
+type EventEdge {
+    node: Event!
+}
+
+type EventMutationResult {
+    data: Event
+    status: Int
+    error: String
+}
+
+type EventDeleteMutationResult {
+    data: Boolean
+    status: Int
+    error: String
+}
+
+type EventQueryResult {    
+    status: Int
+    error: String
+    data: Event
+}
+
+type EventConnection {
+    totalCount: Int!
+    totalEdges: Int!
+    hasMore: Boolean!
+    status: Int!
+    pag: Int!
+    edges: [EventEdge]!
+}
+
+input EventFilter {
+    query: String
+}
+
+input NewEvent {
+    title: String
+    description: String
+    start_time: Date
+    end_time: Date
+    location: String
+}
+
+input EditEvent {
+    id: ID!
+    title: String
+    description: String
+    start_time: Date
+    end_time: Date
+    location: String
+}
+
+type UserEventMutationResult {
+    data: Boolean
+    status: Int
+    error: String
+}
+
+type UserEvent {
+    status: String
+    user: User
+    event: Event
+}
+
+type ListUsersEvent {
+    userEvent: [UserEvent]
+    event: Event
+}
+
+type UsersEventQueryResult {
+    data: ListUsersEvent
+    status: Int
+    error: String
+}
+
+type ListUserEvents {
+    event: Event
+    status: String
+}
+
+type UserEventsQueryResult {
+    data: [ListUserEvents]
+    status: Int
+    error: String
+}
+
+type UserEventUpdateStatusResult {
+    data: Boolean
+    status: Int
+    error: String
+}
+
+extend type Query {
+    event(id: ID title: String): EventQueryResult
+    events(
+        pag: Int = 0
+        num: Int = 20
+        ord: String = "updatedAt"
+        asc: Boolean = false
+        filter: EventFilter
+    ): EventConnection!    
+    usersEvent(eventId: ID!): UsersEventQueryResult
+    userEvents(userId: ID!): UserEventsQueryResult
+}
+
+extend type Mutation {
+    createEvent(
+        input: NewEvent!
+    ): EventMutationResult
+
+    updateEvent(
+        input: EditEvent!
+    ): EventMutationResult
+    deleteEvent(
+        id: ID!
+    ): EventDeleteMutationResult
+    addUserEvent(userId: ID!, eventId: ID!): UserEventMutationResult
+    updateUserEvent(userId: ID!, eventId: ID!, status: String): UserEventUpdateStatusResult
+}

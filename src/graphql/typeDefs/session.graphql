@@ -1,0 +1,20 @@
+type Session {
+    id: ID!
+    user: User!
+    createdAt: Date!
+    loggedOutAt: String
+}
+
+type LoginResultMutation {
+    data: Session
+    status: Int
+    error: String
+}
+
+extend type Mutation {
+    login(
+        email: String!
+        password: String!
+    ): LoginResultMutation
+    logout: Boolean
+}
